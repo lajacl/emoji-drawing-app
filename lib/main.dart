@@ -36,6 +36,18 @@ class ShapesDemoScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
+              'Smiley Face',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              height: 300,
+              child: CustomPaint(
+                painter: SmileyFacePainter(),
+                size: const Size(double.infinity, 300),
+              ),
+            ),
+            const Text(
               'Task 1: Basic Shapes',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
@@ -316,6 +328,55 @@ class StyledShapesPainter extends CustomPainter {
       2.5, // sweep angle
       false,
       arcPaint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+class SmileyFacePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final centerX = size.width / 2;
+    final centerY = size.height / 2;
+
+    // Draw a circle with a border for face
+    final circlePaint = Paint()
+      ..color = Colors.yellow
+      ..style = PaintingStyle.fill;
+    final circleBorderPaint = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 4;
+    canvas.drawCircle(Offset(centerX, centerY), 100, circlePaint);
+    canvas.drawCircle(Offset(centerX, centerY), 100, circleBorderPaint);
+
+    // Draw a circle eye
+    final lEyePaint = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.fill;
+    canvas.drawCircle(Offset(centerX - 40, centerY - 30), 15, lEyePaint);
+
+    // Draw a circle eye
+    final rEyePaint = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.fill;
+    canvas.drawCircle(Offset(centerX + 40, centerY - 30), 15, rEyePaint);
+
+    // Draw an arc
+    final smilePaint = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 5;
+    canvas.drawArc(
+      Rect.fromCenter(center: Offset(centerX, centerY + 30), width: 100, height: 80),
+      0, // start angle in radians
+      3.1, // sweep angle in radians (about 120 degrees)
+      false, // whether to use center
+      smilePaint,
     );
   }
 
