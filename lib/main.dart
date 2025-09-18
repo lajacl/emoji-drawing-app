@@ -4,8 +4,8 @@ void main() {
   runApp(const ShapesDemoApp());
 }
 
-class ShapesDemoApp  extends StatelessWidget {
-  const ShapesDemoApp ({super.key});
+class ShapesDemoApp extends StatelessWidget {
+  const ShapesDemoApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,35 +47,47 @@ class EmojiDrawer extends State<CanvasPainterApp> {
 
     return Scaffold(
       appBar: AppBar(title: const Text("Choose an Emoji to Draw")),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          // Dropdown
-          DropdownButton<String>(
-            value: selectedEmoji,
-            items: const [
-              DropdownMenuItem(value: 'Smiley', child: Text('😊 Smiley Face')),
-              DropdownMenuItem(value: 'Heart', child: Text('❤️ Heart')),
-              DropdownMenuItem(value: 'Party', child: Text('🥳 Party Face')),
-            ],
-            onChanged: (value) {
-              if (value != null) {
-                setState(() => selectedEmoji = value);
-              }
-            },
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.white, Colors.pink],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
-
-          const SizedBox(height: 100),
-
-          // Show chosen drawing
-          Center(
-            child: SizedBox(
-              width: painterSize,
-              height: painterSize,
-              child: CustomPaint(painter: painter),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            // Dropdown
+            DropdownButton<String>(
+              value: selectedEmoji,
+              items: const [
+                DropdownMenuItem(
+                  value: 'Smiley',
+                  child: Text('😊 Smiley Face'),
+                ),
+                DropdownMenuItem(value: 'Heart', child: Text('❤️ Heart')),
+                DropdownMenuItem(value: 'Party', child: Text('🥳 Party Face')),
+              ],
+              onChanged: (value) {
+                if (value != null) {
+                  setState(() => selectedEmoji = value);
+                }
+              },
             ),
-          ),
-        ],
+
+            const SizedBox(height: 100),
+
+            // Show chosen drawing
+            Center(
+              child: SizedBox(
+                width: painterSize,
+                height: painterSize,
+                child: CustomPaint(painter: painter),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
