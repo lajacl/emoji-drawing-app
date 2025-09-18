@@ -48,6 +48,18 @@ class ShapesDemoScreen extends StatelessWidget {
               ),
             ),
             const Text(
+              'Heart',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              height: 300,
+              child: CustomPaint(
+                painter: HeartPainter(),
+                size: const Size(double.infinity, 300),
+              ),
+            ),
+            const Text(
               'Task 1: Basic Shapes',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
@@ -378,6 +390,42 @@ class SmileyFacePainter extends CustomPainter {
       false, // whether to use center
       smilePaint,
     );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+class HeartPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final centerX = size.width / 2;
+    final centerY = size.height / 2;
+
+    // Draw left circle
+    final lCirclePaint = Paint()
+      ..color = Colors.red
+      ..style = PaintingStyle.fill;
+    canvas.drawCircle(Offset(centerX - 50, centerY - 80), 60, lCirclePaint);
+
+    // Draw right circle
+    final rCirclePaint = Paint()
+      ..color = Colors.red
+      ..style = PaintingStyle.fill;
+    canvas.drawCircle(Offset(centerX + 50, centerY - 80), 60, rCirclePaint);
+    
+    // Draw a triangle
+    final trianglePaint = Paint()
+      ..color = Colors.red
+      ..style = PaintingStyle.fill;
+    final trianglePath = Path()
+      ..moveTo(centerX - 105, centerY - 55)
+      ..lineTo(centerX + 105, centerY - 55)
+      ..lineTo(centerX, centerY + 100)
+      ..close();
+    canvas.drawPath(trianglePath, trianglePaint);
   }
 
   @override
