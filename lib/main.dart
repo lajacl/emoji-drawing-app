@@ -1,18 +1,31 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const PainterDropdownDemo());
+  runApp(const ShapesDemoApp());
 }
 
-class PainterDropdownDemo extends StatefulWidget {
-  const PainterDropdownDemo({super.key});
+class ShapesDemoApp  extends StatelessWidget {
+  const ShapesDemoApp ({super.key});
 
   @override
-  State<PainterDropdownDemo> createState() => _PainterDropdownDemoState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Shapes Drawing Demo',
+      theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
+      home: CanvasPainterApp(),
+    );
+  }
 }
 
-class _PainterDropdownDemoState extends State<PainterDropdownDemo> {
-  String _selected = 'Smiley'; // default choice
+class CanvasPainterApp extends StatefulWidget {
+  const CanvasPainterApp({super.key});
+
+  @override
+  State<CanvasPainterApp> createState() => EmojiDrawer();
+}
+
+class EmojiDrawer extends State<CanvasPainterApp> {
+  String selectedEmoji = 'Smiley'; // default choice
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +33,7 @@ class _PainterDropdownDemoState extends State<PainterDropdownDemo> {
     final double painterSize = screenWidth * 2 / 3;
 
     CustomPainter painter;
-    switch (_selected) {
+    switch (selectedEmoji) {
       case 'Heart':
         painter = HeartPainter();
         break;
@@ -39,7 +52,7 @@ class _PainterDropdownDemoState extends State<PainterDropdownDemo> {
         children: [
           // Dropdown
           DropdownButton<String>(
-            value: _selected,
+            value: selectedEmoji,
             items: const [
               DropdownMenuItem(value: 'Smiley', child: Text('😊 Smiley Face')),
               DropdownMenuItem(value: 'Heart', child: Text('❤️ Heart')),
@@ -47,7 +60,7 @@ class _PainterDropdownDemoState extends State<PainterDropdownDemo> {
             ],
             onChanged: (value) {
               if (value != null) {
-                setState(() => _selected = value);
+                setState(() => selectedEmoji = value);
               }
             },
           ),
@@ -85,19 +98,14 @@ class SmileyFacePainter extends CustomPainter {
     canvas.drawCircle(Offset(centerX, centerY), 100, circlePaint);
     canvas.drawCircle(Offset(centerX, centerY), 100, circleBorderPaint);
 
-    // Draw a circle eye
-    final lEyePaint = Paint()
+    // Draw a circle eyes
+    final eyePaint = Paint()
       ..color = Colors.black
       ..style = PaintingStyle.fill;
-    canvas.drawCircle(Offset(centerX - 40, centerY - 30), 15, lEyePaint);
+    canvas.drawCircle(Offset(centerX - 40, centerY - 30), 15, eyePaint);
+    canvas.drawCircle(Offset(centerX + 40, centerY - 30), 15, eyePaint);
 
-    // Draw a circle eye
-    final rEyePaint = Paint()
-      ..color = Colors.black
-      ..style = PaintingStyle.fill;
-    canvas.drawCircle(Offset(centerX + 40, centerY - 30), 15, rEyePaint);
-
-    // Draw an arc
+    // Draw an arc for a smile
     final smilePaint = Paint()
       ..color = Colors.black
       ..style = PaintingStyle.stroke
@@ -108,9 +116,9 @@ class SmileyFacePainter extends CustomPainter {
         width: 100,
         height: 80,
       ),
-      0, // start angle in radians
-      3.1, // sweep angle in radians (about 120 degrees)
-      false, // whether to use center
+      0,
+      3.1,
+      false,
       smilePaint,
     );
   }
@@ -175,7 +183,7 @@ class PartyFacePainter extends CustomPainter {
     canvas.drawCircle(Offset(centerX, centerY), 100, facePaint);
     canvas.drawCircle(Offset(centerX, centerY), 100, faceBorderPaint);
 
-    // Draw an eye
+    // Draw eyes
     final eyePaint = Paint()
       ..color = Colors.black
       ..style = PaintingStyle.fill;
@@ -196,6 +204,7 @@ class PartyFacePainter extends CustomPainter {
       eyePaint,
     );
 
+    // Draw open mouth
     final mouthPaint = Paint()
       ..color = Colors.black
       ..style = PaintingStyle.stroke
@@ -209,6 +218,7 @@ class PartyFacePainter extends CustomPainter {
       mouthPaint,
     );
 
+    // Draw party hat
     final hatPaint = Paint()
       ..color = Colors.pink
       ..style = PaintingStyle.fill;
