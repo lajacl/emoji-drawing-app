@@ -2,7 +2,71 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 void main() {
-  runApp(const ShapesDemoApp());
+  runApp(const PainterDropdownDemo());
+}
+
+class PainterDropdownDemo extends StatefulWidget {
+  const PainterDropdownDemo({super.key});
+
+  @override
+  State<PainterDropdownDemo> createState() => _PainterDropdownDemoState();
+}
+
+class _PainterDropdownDemoState extends State<PainterDropdownDemo> {
+  String _selected = 'Smiley'; // default choice
+
+  @override
+  Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double painterSize = screenWidth * 2 / 3;
+
+    CustomPainter painter;
+    switch (_selected) {
+      case 'Heart':
+        painter = HeartPainter();
+        break;
+      case 'Party':
+        painter = PartyFacePainter();
+        break;
+      case 'Smiley':
+      default:
+        painter = SmileyFacePainter();
+    }
+
+    return Scaffold(
+      appBar: AppBar(title: const Text("Choose an Emoji to Draw")),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          // Dropdown
+          DropdownButton<String>(
+            value: _selected,
+            items: const [
+              DropdownMenuItem(value: 'Smiley', child: Text('😊 Smiley Face')),
+              DropdownMenuItem(value: 'Heart', child: Text('❤️ Heart')),
+              DropdownMenuItem(value: 'Party', child: Text('🥳 Party Face')),
+            ],
+            onChanged: (value) {
+              if (value != null) {
+                setState(() => _selected = value);
+              }
+            },
+          ),
+
+          const SizedBox(height: 100),
+
+          // Show chosen drawing
+          Center(
+            child: SizedBox(
+              width: painterSize,
+              height: painterSize,
+              child: CustomPaint(painter: painter),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class ShapesDemoApp extends StatelessWidget {
@@ -13,7 +77,7 @@ class ShapesDemoApp extends StatelessWidget {
     return MaterialApp(
       title: 'Shapes Drawing Demo',
       theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
-      home: const ShapesDemoScreen(),
+      home: const PainterDropdownDemo(),
     );
   }
 }
@@ -30,6 +94,8 @@ class ShapesDemoScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            PainterDropdownDemo(),
+            const SizedBox(height: 20),
             const Text(
               'Smiley Face',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
